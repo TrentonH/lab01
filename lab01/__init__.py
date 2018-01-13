@@ -5,6 +5,13 @@ __author__ = 'Trenton'
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+import csv
+
+#extra credit
+#spamReader = csv.reader(open('eggs.csv', newline=''), delimiter=' ', quotechar='|')
+
+
 iris = datasets.load_iris()
 
 # Show the data (the attributes of each instance)
@@ -45,5 +52,9 @@ class HardCodedClassifier:
 classifier = HardCodedClassifier()
 model = classifier.fit(X_train, y_train)
 targets_predicted = model.predict(X_test)
+
+acc = accuracy_score(y_test,targets_predicted)
+print ("The prcent correct is {0:.2%}".format(acc))
+
 
 print (targets_predicted)
