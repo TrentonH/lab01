@@ -152,6 +152,7 @@ class KNNClassifier:
 ############part3##########
 
 print("part 3 starts here")
+print("cars starts here")
 
 # Use the k-Nearest-Neighbors algorithm to
 # accurately train a model based on the data
@@ -211,27 +212,82 @@ totalAccuracy = 0
 myAccuracy = 0
 
 kf = KFold(n_splits=10)
-for train, test in kf.split(CarNP):
-    X_train, X_test, y_train, y_test = dataNP[train], dataNP[test], targetNP[train], targetNP[test]
-    classifier = KNNClassifier(n_neighbors=1)
-    model = classifier.fit(X_train, y_train)
-    targets_predicted = model.predictCar(X_test)
-    myAccuracy += accuracy_score(y_test,targets_predicted)
-    m1 = createModel(X_train, y_train)
-    tp = modelPredict(m1, X_test)
-    totalAccuracy += getAccuracy(tp, y_test)
-print ("kfold off the shelf prcent correct is ")
-print((totalAccuracy/kf.get_n_splits()*100))
-print ("my kfold prcent correct is ")
-print((myAccuracy/kf.get_n_splits()*100))
+#for train, test in kf.split(CarNP):
+    #X_train, X_test, y_train, y_test = dataNP[train], dataNP[test], targetNP[train], targetNP[test]
+    #classifier = KNNClassifier(n_neighbors=1)
+    #model = classifier.fit(X_train, y_train)
+    #targets_predicted = model.predictCar(X_test)
+    #myAccuracy += accuracy_score(y_test,targets_predicted)
+    #m1 = createModel(X_train, y_train)
+    #tp = modelPredict(m1, X_test)
+    #totalAccuracy += getAccuracy(tp, y_test)
+
+#print ("kfold off the shelf prcent correct is ")
+#print((totalAccuracy/kf.get_n_splits()*100))
+#print ("my kfold prcent correct is ")
+#print((myAccuracy/kf.get_n_splits()*100))
 
 
 
-###############################################
-#autoHeaders =
-#DC = pd.read_csv("auto-mpg.data",header=None, names=autoHeaders )
+######################################################################################################################
+######################################################################################################################
+######################################################################################################################
 
-#DC["num_cylinders"].value_counts()
-#print(DC.head(10))
-###############################################
-#dataPima = pd.read_csv("pima-indians-diabetes.data",header=None, names=pimaHeaders,  na_values=[" ?"] )
+print("pima starts here")
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+
+dataset = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/pima-indians-diabetes/pima-indians-diabetes.data")
+dataset.columns = ["numPreg", "Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI", "DPF", "age", "class"]
+
+zero_not_accepted = ['Glucose', 'BloodPressure', 'SkinThickness', 'BMI', 'Insulin']
+
+for column in zero_not_accepted:
+    dataset[column] = dataset[column].replace(0, np.NaN)
+    mean = int(dataset[column].mean(skipna=True))
+    dataset[column] = dataset[column].replace(np.NaN, mean)
+
+CarNP = dataset.as_matrix()
+
+
+carTargets =[]
+for x in CarNP:
+    carTargets.append(x[8])
+CarNP = np.delete(CarNP, 8, 1)
+
+dataNP = CarNP
+targetNP = np.array(carTargets)
+
+totalAccuracy = 0
+myAccuracy = 0
+
+kf = KFold(n_splits=10)
+#for train, test in kf.split(CarNP):
+    #X_train, X_test, y_train, y_test = dataNP[train], dataNP[test], targetNP[train], targetNP[test]
+    #classifier = KNNClassifier(n_neighbors=1)
+    #model = classifier.fit(X_train, y_train)
+    #targets_predicted = model.predictCar(X_test)
+    #myAccuracy += accuracy_score(y_test,targets_predicted)
+    #m1 = createModel(X_train, y_train)
+    #tp = modelPredict(m1, X_test)
+    #totalAccuracy += getAccuracy(tp, y_test)
+
+#print ("kfold off the shelf prcent correct is ")
+#print((totalAccuracy/kf.get_n_splits()*100))
+#print ("my kfold prcent correct is ")
+#print((myAccuracy/kf.get_n_splits()*100))
+######################################################################################################################
+######################################################################################################################
+######################################################################################################################
+print("auto starts here")
+
+dataset = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data", na_values="?", delim_whitespace=True,)
+dataset.columns = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "model year", "origin", "name"]
+
+not_accepted = ['horsepower']
+
+for column in not_accepted:
+    mean = int(dataset[column].mean(skipna=True))
+    dataset[column] = dataset[column].replace(np.NaN, mean)
